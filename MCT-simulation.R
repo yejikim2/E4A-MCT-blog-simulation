@@ -74,7 +74,8 @@ library(dplyr)
       mean = mean(y),
       q3 = quantile(y, probs = 0.75),
       max = max(y),
-      sd = sd(y))
+      sd = sd(y),
+      iqr = q3-q1)
   
   # By 'race2' variable
   summarystats2_full <- data_full %>% 
@@ -87,7 +88,8 @@ library(dplyr)
       mean = mean(y),
       q3 = quantile(y, probs = 0.75),
       max = max(y),
-      sd = sd(y))
+      sd = sd(y),
+      iqr = q3-q1)
 
 # Linear regressions and joint test ####
   # Model 1 - four race groups
