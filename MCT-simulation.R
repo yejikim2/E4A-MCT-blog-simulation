@@ -8,10 +8,10 @@ library(dplyr)
   # Set number of individuals within 4 'race' groups
   # Last group will be split to 65 and 35 => total of 5 race groups in 'race2'
   # The group n can be changed as needed to simulate desired assessment
-  npergroup_uneq <-c(430, 320, 150, 100)
+  npergroup <-c(430, 320, 150, 100)
   
   # Create race groups 
-  race <- rep(1:4, times = npergroup_uneq)
+  race <- rep(1:4, times = npergroup)
   
   # create dummy vars for 'race' with race == 1 as referent group
   dummyrace2 <- as.integer(race == 2)
@@ -39,13 +39,13 @@ library(dplyr)
   }
 
   # Dataframe to store outcome
-  y_uneq <- data.frame(y)
-  data_uneq <- cbind(y_uneq,data) 
+  y <- data.frame(y)
+  data <- cbind(y,data) 
 
 # Create new race2 variable with 5 groups ####
   # 100 observations in race group 4 is split randomly into n = 65 and n = 35 into race group 4 and 5, respectively in new race2 variable
   # Note: You can change the '65' value in line 50 below to desired group split
-  data_full <- data_uneq %>%
+  data_full <- data %>%
     mutate(race2 = case_when(
       race == 4 & row_number() %in% sample(which(race == 4), 65) ~ 4,
       race == 4 ~ 5,
@@ -93,41 +93,41 @@ library(dplyr)
 
 # Linear regressions and joint test ####
   # Model 1 - four race groups
-  model1_uneq <- lm(y ~ dummyrace2 + dummyrace3 + dummyrace4, data = data_full)
-  summary(model1_uneq) 
+  model1 <- lm(y ~ dummyrace2 + dummyrace3 + dummyrace4, data = data_full)
+  summary(model1) 
   
   # Model 2 - five race groups    
-  model2_uneq <- lm(y ~ dummyrace2_2 + dummyrace2_3 + dummyrace2_4 + dummyrace2_5,
+  model2 <- lm(y ~ dummyrace2_2 + dummyrace2_3 + dummyrace2_4 + dummyrace2_5,
                     data = data_full)
-  summary(model2_uneq) 
+  summary(model2) 
   
 # Multiple Comparisons Adjustments
   # Model 1 - four race groups
   
     # Pull coefficients from model output
-    coeff_m1_uneq <- summary(model1_uneq)
+    coeff_m1 <- summary(model1)
     
     # Extract p-values for dummyrace1, dummyrace2, and dummyrace3
-    p_values_uneq <- coeff_m1_uneq$coefficients[, "Pr(>|t|)"][2:4]
+    p_values <- coeff_m1$coefficients[, "Pr(>|t|)"][2:4]
     
     # Adjustment methods
     adjust_methods <- c("bonferroni", "BH", "fdr","hochberg",
                         "BY", "hommel", "holm")
     
     # Adjust p-values using different methods
-    p_bonferroni <- p.adjust(p_values_uneq, method = "bonferroni")
-    p_bh <- p.adjust(p_values_uneq, method = "BH")
-    p_fdr <- p.adjust(p_values_uneq, method = "fdr")
-    p_hochberg <- p.adjust(p_values_uneq, method = "hochberg")
-    p_by <- p.adjust(p_values_uneq, method = "BY")
-    p_hommel <- p.adjust(p_values_uneq, method = "hommel")
-    p_holm <- p.adjust(p_values_uneq, method = "holm")
+    p_bonferroni <- p.adjust(p_values, method = "bonferroni")
+    p_bh <- p.adjust(p_values, method = "BH")
+    p_fdr <- p.adjust(p_values, method = "fdr")
+    p_hochberg <- p.adjust(p_values, method = "hochberg")
+    p_by <- p.adjust(p_values, method = "BY")
+    p_hommel <- p.adjust(p_values, method = "hommel")
+    p_holm <- p.adjust(p_values, method = "holm")
     
     # Create dataframe of original and adjusted p-values
-    model1_pvalues_uneq <- data.frame(
-          method = rep(adjust_methods, each = length(p_values_uneq)),
+    model1_pvalues <- data.frame(
+          method = rep(adjust_methods, each = length(p_values)),
           dummyrace = rep(paste("dummyrace", 2:4, sep = ""), times = length(adjust_methods)),
-          original_p = rep(p_values_uneq, times = length(adjust_methods)),
+          original_p = rep(p_values, times = length(adjust_methods)),
           adjusted_p = c(p_bonferroni, p_holm, p_fdr, p_hochberg,
                          p_by,p_hommel, p_bh)
         )
@@ -135,21 +135,21 @@ library(dplyr)
   # Model 2 - five race groups
     
     # Same steps as above but for Model 2
-    coeff_m2_uneq <- summary(model2_uneq)
-    p_values2_uneq <- coeff_m2_uneq$coefficients[, "Pr(>|t|)"][2:5]
+    coeff_m2 <- summary(model2)
+    p_values2 <- coeff_m2$coefficients[, "Pr(>|t|)"][2:5]
     
-    p_bonferroni2 <- p.adjust(p_values2_uneq, method = "bonferroni")
-    p_bh2 <- p.adjust(p_values2_uneq, method = "BH")
-    p_fdr2 <- p.adjust(p_values2_uneq, method = "fdr")
-    p_hochberg2 <- p.adjust(p_values2_uneq, method = "hochberg")
-    p_by2 <- p.adjust(p_values2_uneq, method = "BY")
-    p_hommel2 <- p.adjust(p_values2_uneq, method = "hommel")
-    p_holm2 <- p.adjust(p_values2_uneq, method = "holm")
+    p_bonferroni2 <- p.adjust(p_values2, method = "bonferroni")
+    p_bh2 <- p.adjust(p_values2, method = "BH")
+    p_fdr2 <- p.adjust(p_values2, method = "fdr")
+    p_hochberg2 <- p.adjust(p_values2, method = "hochberg")
+    p_by2 <- p.adjust(p_values2, method = "BY")
+    p_hommel2 <- p.adjust(p_values2, method = "hommel")
+    p_holm2 <- p.adjust(p_values2, method = "holm")
     
-    model2_pvalues_uneq <- data.frame(
-      method = rep(adjust_methods, each = length(p_values2_uneq)),
+    model2_pvalues <- data.frame(
+      method = rep(adjust_methods, each = length(p_values2)),
       dummyrace = rep(paste("dummyrace", 2:5, sep = ""), times = length(adjust_methods)),
-      original_p = rep(p_values2_uneq, times = length(adjust_methods)),
+      original_p = rep(p_values2, times = length(adjust_methods)),
       adjusted_p = c(p_bonferroni2, p_holm2, p_fdr2, p_hochberg2,
                      p_by2,p_hommel2, p_bh2)
     )
