@@ -13,7 +13,7 @@ n_iterations  <- 1000
   
   # Create dataset of n = 1000 ####
   # Set number of individuals within 4 'race' groups
-  # Last group will be split to 65 and 35 => total of 5 race groups in 'race2'
+  # Last group will be split to 70 and 30 => total of 5 race groups in 'race2'
   # The group n can be changed as needed to simulate desired assessment
   npergroup <-c(430, 320, 150, 100)
   
@@ -52,7 +52,7 @@ n_iterations  <- 1000
     # Note: You can change the '65' value in line 50 below to desired group split
     data_full <- data %>%
       mutate(race2 = case_when(
-        race == 4 & row_number() %in% sample(which(race == 4), 65) ~ 4,
+        race == 4 & row_number() %in% sample(which(race == 4), 70) ~ 4,
         race == 4 ~ 5,
         race == 3 ~ 3,
         race == 2 ~ 2,
