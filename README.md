@@ -6,7 +6,7 @@ The accompanying methods note can be found on the Evidence for Action website:
 - [Link to the note on Evidence for Action website](https://www.evidenceforaction.org/multiple-comparison-adjustments-health-and-racial-equity-research)
 
 The full citation is: 
-> Kim Y, Buto P, Nuru-Jeter A, Glymour MM. (2024, November) Multiple comparison adjustments in health and racial equity research. Evidence for Action. _add full link here_
+> Kim Y, Buto P, Nuru-Jeter A, Glymour MM. (2024, November) Multiple comparison adjustments in health and racial equity research. Evidence for Action. _www.evidenceforaction.org/multiple-comparison-adjustments-health-and-racial-equity-research_
 
 ### Contact
 - [Ye Ji Kim](ykim282@gmail.com)
